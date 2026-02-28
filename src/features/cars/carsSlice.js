@@ -1,52 +1,42 @@
-import { carsData } from "@/data/carsData";
 import { createSlice } from "@reduxjs/toolkit";
+import { carsData } from "@/data/carsData";
 
 const initialState = {
- cars: carsData,
- filteredCars: carsData,
- category: "All",
- sort: "default",
- loading: false
-}
+  cars: carsData,
+  category: "All",
+  sort: "default",
+  search: "",
+  minPrice: "0",
+  maxPrice: "1000",
+  loading: false,
+};
 
 const carsSlice = createSlice({
-    name: "cars",
-    initialState,
-    reducers: {
-        setCategory: (state, action) => {
-            state.category = action.payload
+  name: "cars",
+  initialState,
+  reducers: {
+    setCategory: (state, action) => {
+      state.category = action.payload;
+    },
 
-            if(action.payload === "All"){
-                state.filteredCars = state.cars
-            } else {
-                state.filteredCars = state.filteredCars.filter(
-                    car => car.category === action.payload
-                )
-            }
-        },
+    setSort: (state, action) => {
+      state.sort = action.payload;
+    },
 
-        setSort: (state, action) => {
-            state.sort = action.payload
+    setSearch: (state, action) => {
+        state.search = action.payload
+    },
 
-            if(action.payload === "low") {
-              state.filteredCars = [...state.filteredCars].sort(
-              (a,b) => a.price - b.price
-              )
-            }
+    setPriceRange: (state,action) => {
+        state.minPrice = action.payload.min
+        state.maxPrice = action.payload.max
+    },
 
-            if(action.payload === "high") {
-                state.filteredCars = [...state.filteredCars].sort(
-                    (a,b) => b.price - a.price
-                )
-            }
-        },
+    setLoading: (state, action) => {
+      state.loading = action.payload;
+    },
+  },
+});
 
-
-        setLoading: (state, action) => {
-            state.loading = action.payload
-        }
-    }
-})
-
-export const {setCategory, setSort, setLoading} = carsSlice.actions
-export default carsSlice.reducer
+export const { setCategory, setSort, setLoading , setSearch, setPriceRange} = carsSlice.actions;
+export default carsSlice.reducer;
