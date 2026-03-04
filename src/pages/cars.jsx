@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { CarsCard, SkeletonCard } from "@/components";
@@ -25,6 +25,20 @@ const Cars = () => {
 
   const { loading, cars, category, sort, search, minPrice, maxPrice } =
     useSelector((state) => state.cars);
+
+  const [localSearch, setLocalSearch] = useState(search);
+
+  useEffect(() => {
+
+  const timer = setTimeout(() => {
+    dispatch(setSearch(localSearch))
+  }, 400)
+
+  return () => {
+    clearTimeout(timer)
+  }
+
+}, [localSearch])
 
   // =========================
   // 🔥 FILTER + SORT LOGIC
@@ -86,8 +100,8 @@ const Cars = () => {
         <div className="w-[220px]">
           <Input
             placeholder="Search car..."
-            value={search}
-            onChange={(e) => dispatch(setSearch(e.target.value))}
+            value={localSearch}
+            onChange={(e) => setLocalSearch(e.target.value)}
           />
         </div>
 
@@ -101,9 +115,15 @@ const Cars = () => {
               <SelectValue placeholder="Category" />
             </SelectTrigger>
             <SelectContent className="bg-zinc-900 text-white border-zinc-700">
-              <SelectItem value="All">All</SelectItem>
-              <SelectItem value="SUV">SUV</SelectItem>
-              <SelectItem value="Sedan">Sedan</SelectItem>
+              <SelectItem value="All" className={`cursor-pointer`}>
+                All
+              </SelectItem>
+              <SelectItem value="SUV" className={`cursor-pointer`}>
+                SUV
+              </SelectItem>
+              <SelectItem value="Sedan" className={`cursor-pointer`}>
+                Sedan
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -118,10 +138,16 @@ const Cars = () => {
               <SelectValue placeholder="Sort by Price" />
             </SelectTrigger>
 
-            <SelectContent className="bg-zinc-900 text-white border-zinc-700">
-              <SelectItem value="default">Default</SelectItem>
-              <SelectItem value="low">Cheap → Expensive</SelectItem>
-              <SelectItem value="high">Expensive → Cheap</SelectItem>
+            <SelectContent className="bg-zinc-900 text-white border-zinc-700 ">
+              <SelectItem value="default" className={`cursor-pointer`}>
+                Default
+              </SelectItem>
+              <SelectItem value="low" className={`cursor-pointer`}>
+                Cheap → Expensive
+              </SelectItem>
+              <SelectItem value="high" className={`cursor-pointer`}>
+                Expensive → Cheap
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
