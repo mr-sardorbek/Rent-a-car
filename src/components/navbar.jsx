@@ -3,10 +3,19 @@ import { NavLink } from "react-router-dom";
 import { Button } from "./ui/button";
 import ThemeToggle from "./themeToggle";
 import { HiMenu, HiX } from "react-icons/hi";
+import { useDispatch, useSelector } from "react-redux";
+import { logout } from "@/features/auth/authSlice";
+import { LogIn, LogOut } from "lucide-react";
 
 const Navbar = () => {
+  const isAuth = useSelector(state => state.auth.isAuth)
+  const dispatch = useDispatch()
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+
+  const handleLogout = () => {
+    dispatch(logout())
+  }
 
   useEffect(() => {
     const handleScroll = () => {
@@ -58,6 +67,7 @@ const Navbar = () => {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center gap-6">
+            <ThemeToggle />
             <NavLink to={`/`} className={linkClass}>
               Home
             </NavLink>
@@ -70,20 +80,42 @@ const Navbar = () => {
               About
             </NavLink>
 
-            <ThemeToggle />
+            
 
-            <Button
-              className="bg-secondary hover:bg-hover cursor-pointer
-  text-background
-  px-5 py-2
-  rounded-xl
-  shadow-md
-  hover:shadow-xl
-  hover:scale-105
-  transition-all duration-300"
-            >
-              Login
-            </Button>
+            {!isAuth ? (
+  <NavLink to="/login">
+    <Button
+      className="bg-secondary hover:bg-hover cursor-pointer
+      text-foreground
+      px-5 py-2
+      rounded-xl
+      shadow-md
+      hover:shadow-xl
+      hover:scale-105
+      transition-all duration-300"
+    >
+      <LogIn/> Login
+    </Button>
+  </NavLink>
+) : (
+  <>
+    <NavLink
+      to="/wishlist"
+      className={linkClass}
+      onClick={() => setOpen(false)}
+    >
+      Wishlist
+    </NavLink>
+
+
+    <Button
+      onClick={handleLogout}
+      className="bg-red-500 text-white"
+    >
+      <LogOut/> Logout
+    </Button>
+  </>
+)}
           </div>
 
           {/* Mobile Toggle */}
@@ -127,18 +159,35 @@ const Navbar = () => {
 
             <ThemeToggle />
 
-            <Button
-              className="bg-secondary hover:bg-hover cursor-pointer
-  text-background
-  px-5 py-2
-  rounded-xl
-  shadow-md
-  hover:shadow-xl
-  hover:scale-105
-  transition-all duration-300"
-            >
-              Login
-            </Button>
+            {!isAuth ? (
+  <NavLink to="/login">
+    <Button
+      className="bg-secondary hover:bg-hover cursor-pointer
+      text-background
+      px-5 py-2
+      rounded-xl
+      shadow-md
+      hover:shadow-xl
+      hover:scale-105
+      transition-all duration-300"
+    >
+      Login
+    </Button>
+  </NavLink>
+) : (
+  <>
+    <NavLink to="/wishlist" className={linkClass}>
+      Wishlist
+    </NavLink>
+
+    <Button
+      onClick={handleLogout}
+      className="bg-red-500 hover:bg-red-600 text-white"
+    >
+      Logout
+    </Button>
+  </>
+)}
           </div>
         )}
       </div>
