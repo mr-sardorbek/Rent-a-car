@@ -6,6 +6,7 @@ import { HiMenu, HiX } from "react-icons/hi";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "@/features/auth/authSlice";
 import { LogIn, LogOut } from "lucide-react";
+import { logo } from "@/assets";
 
 const Navbar = () => {
   const isAuth = useSelector(state => state.auth.isAuth)
@@ -62,7 +63,7 @@ const Navbar = () => {
             to="/"
             className="text-secondary text-2xl md:text-3xl font-bold tracking-wide"
           >
-            RENT A CAR
+           <img src={logo} alt="" className="object-contain w-46.5 h-10.5"/>
           </NavLink>
 
           {/* Desktop Menu */}
